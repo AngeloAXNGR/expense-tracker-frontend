@@ -1,8 +1,10 @@
+import "./Expenses.css";
 import {useContext, useEffect} from 'react'
 import { ExpenseContext } from '../contexts/ExpenseContext'
 import { useParams } from 'react-router-dom'
 import { ItemsObject } from '../contexts/ExpenseContext'
 import DeleteIcon from '../assets/delete.svg';
+import ItemForm from "../components/form/ItemForm";
 
 const ItemData = ({id, name, price, quantity}:ItemsObject) => {
 	const {expenseId} = useParams()
@@ -23,7 +25,7 @@ const ItemData = ({id, name, price, quantity}:ItemsObject) => {
 }
 
 const ItemList = () => {
-	const {items, loadItemsByExpense} = useContext(ExpenseContext);
+	const {items, loadItemsByExpense, toggleShowForm, showItemForm} = useContext(ExpenseContext);
 	const {expenseId} = useParams()
 	useEffect(() => {
 		loadItemsByExpense(Number(expenseId))
@@ -45,10 +47,16 @@ const ItemList = () => {
 	console.log(items);
 	return (
 		<div className="item-container">
+			{showItemForm && <ItemForm expenseId={Number(expenseId)}/>}
+			<div className="item-component-buttons">
+				<button id="toggle-items-form" onClick={(e) => toggleShowForm(e)}>Add</button>
+				<button>Back</button>
+			</div>
 			<div className="items">
 				{itemElements}
 			</div>
 		</div>
+
 	)
 }
 
