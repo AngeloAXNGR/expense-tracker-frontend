@@ -79,6 +79,7 @@ export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) =
 	}
 
 	const deleteExpense =  async (event:React.MouseEvent<HTMLImageElement>, id:number) => {
+		event.stopPropagation();
 		await axios.delete(`http://localhost:8080/api/expenses/${id}`)
 		loadAllExpenses();
 	}
