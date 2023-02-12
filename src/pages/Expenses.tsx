@@ -2,6 +2,7 @@ import './Expenses.css'
 import { useContext, useState } from 'react'
 import { ExpenseContext } from '../contexts/ExpenseContext'
 import { ExpenseObject } from '../contexts/ExpenseContext'
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '../assets/delete.svg';
 import Form from '../components/form/Form';
 
@@ -26,12 +27,19 @@ const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObje
 		opacity:100
 	}
 
+	const navigate = useNavigate();
+
+	const navigateTo = (id:number) => {
+		navigate(`/${id}/items`)
+	}
+
 	return(
 		<div 
 			className="expense" 
 			style={isHover === id ? hoverStyle : {}}
 			onMouseEnter={() => handleMouseEnter(id)} 
 			onMouseLeave={() => handleMouseLeave(id)}
+			onClick={() => navigateTo(id)}
 		>
 			<div className="expense-left-section">
 				<h2>{title}</h2>
