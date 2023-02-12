@@ -16,6 +16,13 @@ export type ExpenseObject = {
 	description: string
 }
 
+export type ItemsObject = {
+	id:number
+	name:string,
+	price:number,
+	quantity:number
+}
+
 type ExpenseContextType = {
 	expenses: ExpenseObject[],
 	expenseForm: ExpenseForm,
@@ -24,6 +31,13 @@ type ExpenseContextType = {
 	handleFormInputs: (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 	addExpense: (event:React.MouseEvent<HTMLButtonElement>) => void
 	deleteExpense: (event:React.MouseEvent<HTMLImageElement>, id:number) => void,
+
+	items: ItemsObject[],
+	loadItemsByExpense:any,
+	deleteItem:(event:React.MouseEvent<HTMLImageElement>, id:number, expenseId:number) => void,
+
+
+
 }
 
 type ExpenseContextProviderProps = {
@@ -34,6 +48,7 @@ export const ExpenseContext = createContext({} as ExpenseContextType);
 
 export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) => {
 	const [expenses, setExpenses] = useState([])
+	const [items, setItems] = useState([])
 
 	const [showForm, setShowForm] = useState(false);
 	const [expenseForm, setExpenseForm] = useState<ExpenseForm>({title:'', recipient:'', allowance:0, description:''})
@@ -84,8 +99,19 @@ export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) =
 		loadAllExpenses();
 	}
 
+	const loadItemsByExpense = async (id:number) => {
+		setItems([]);
+		const result = await axios.get(`http://localhost:8080/api/expenses/${id}/items`)
+		setItems(result.data);
+	}
+
+	const deleteItem = async(event:React.MouseEvent<HTMLImageElement>,id:number, expenseId:number) => {
+		await axios.delete(`http://localhost:8080/api/items/${id}`)
+		loadItemsByExpense(expenseId)
+	}
+
 	return(
-		<ExpenseContext.Provider value={{expenses, expenseForm, showForm, toggleShowForm, handleFormInputs,addExpense, deleteExpense}} >
+		<ExpenseContext.Provider value={{expenses, expenseForm,showForm, toggleShowForm, handleFormInputs,addExpense, deleteExpense, items, loadItemsByExpense, deleteItem}} >
 			{children}
 		</ExpenseContext.Provider>
 	)
