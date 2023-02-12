@@ -1,0 +1,10 @@
+header{
+	background-color: #282c34;;
+	color:white;
+	padding: 20px;
+}
+
+#app-title{
+	margin:0;
+	font-size:3rem;
+}
