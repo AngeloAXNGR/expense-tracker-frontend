@@ -7,7 +7,7 @@ const Form = () => {
 	console.log(expenseForm);
 	return (
 		<div className="form">
-			<div className="filler" onClick={toggleShowForm}></div>
+			<div className="filler" id="toggle-expense-form" onClick={(e) => toggleShowForm(e)}></div>
 			<div className="modal">
 				<div className="form-inputs">
 					<input
@@ -45,7 +45,7 @@ const Form = () => {
 				</div>
 				<div className="form-buttons">
 					<button onClick={addExpense}>Add</button>
-					<button onClick={toggleShowForm}>Cancel</button>
+					<button id="toggle-expense-form" onClick={(e) => toggleShowForm(e)}>Cancel</button>
 				</div>
 			</div>
 		</div>

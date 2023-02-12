@@ -72,7 +72,7 @@ const Expenses = () => {
 
 	return (
 		<div className="expense-container">
-			<button className="button" onClick={toggleShowForm}>Add Expense</button>
+			<button className="button" id="toggle-expense-form" onClick={(e) => toggleShowForm(e)}>Add Expense</button>
 			{showForm && <Form/>}
 			<div className="expenses">
 				{expenseItems}
