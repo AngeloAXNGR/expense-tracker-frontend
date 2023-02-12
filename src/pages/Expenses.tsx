@@ -1,14 +1,13 @@
 import './Expenses.css'
 import { useContext } from 'react'
 import { ExpenseContext } from '../contexts/ExpenseContext'
-
 import { ExpenseObject } from '../contexts/ExpenseContext'
-
 import DeleteIcon from '../assets/delete.svg';
+import Form from '../components/form/Form';
 
 
 const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObject) => {
-
+	const {deleteExpense} = useContext(ExpenseContext);
 	return(
 		<div className="expense">
 			<div className="expense-left-section">
@@ -17,34 +16,36 @@ const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObje
 			</div>
 			<div className="expense-right-section">
 				<h1>{allowance}</h1>
-				<img src={DeleteIcon} alt="" />
+				<img src={DeleteIcon} alt="" onClick={(e) => deleteExpense(e, id)}/>
 			</div>
 		</div>
 	)
 }
 
 const Expenses = () => {
-	const {expenses} = useContext(ExpenseContext);
+	const {expenses, showForm, toggleShowForm} = useContext(ExpenseContext);
+	console.log(expenses);
+
+	const expenseItems = expenses.map((expense) => {
+		return(
+			<ExpenseData
+				key={expense.id}
+				id={expense.id}
+				title={expense.title}
+				recipient={expense.recipient}
+				allowance={expense.allowance}
+				description={expense.description}
+			/>
+		)
+	})
 
 	return (
 		<div className="expense-container">
-			<button>Add Expense</button>
-
+			<button className="button" onClick={toggleShowForm}>Add Expense</button>
+			{showForm && <Form/>}
 			<div className="expenses">
-				{
-					expenses.map((expense) => {
-						return(
-							<ExpenseData
-								key={expense.id}
-								id={expense.id}
-								title={expense.title}
-								recipient={expense.recipient}
-								allowance={expense.allowance}
-								description={expense.description}
-							/>
-						)
-					})
-				}
+				{expenseItems}
+
 			</div>
 		</div>
 	)
