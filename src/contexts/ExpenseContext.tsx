@@ -31,22 +31,28 @@ export type ItemsObject = {
 
 type ExpenseContextType = {
 	expenses: ExpenseObject[],
+	expense: ExpenseObject,
 	expenseForm: ExpenseForm,
 	showForm:boolean,
 	toggleShowForm: (event:React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void
+	openEditForm: (event:React.MouseEvent<HTMLButtonElement | HTMLDivElement>, expenseId:number, id:number) => void
+	closeEditForm: (event:React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void
 	handleFormInputs: (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 	addExpense: (event:React.MouseEvent<HTMLButtonElement>) => void
 	deleteExpense: (event:React.MouseEvent<HTMLImageElement>, id:number) => void,
+	loadOneExpense:any,
 
+	currentItemId: number,
 	items: ItemsObject[],
 	loadItemsByExpense:any,
 	showItemForm:boolean,
+	showEditItemForm:boolean,
 	itemsForm: ItemsForm,
 	handleItemFormInputs: (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 	addItem:(event:React.MouseEvent<HTMLButtonElement>, expenseId:number) => void
 	deleteItem:(event:React.MouseEvent<HTMLImageElement>, id:number, expenseId:number) => void,
-
-
+	loadOneItem: any,
+	updateItem:(event:React.MouseEvent<HTMLButtonElement>, id:number)=> void,
 
 }
 
@@ -58,12 +64,15 @@ export const ExpenseContext = createContext({} as ExpenseContextType);
 
 export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) => {
 	const [expenses, setExpenses] = useState([])
+	const [expense, setExpense] = useState({} as ExpenseObject)
 	const [items, setItems] = useState([])
-
 	const [showForm, setShowForm] = useState(false);
+	const [showEditItemForm, setShowEditItemForm] = useState(false);
 	const [showItemForm, setShowItemForm] = useState(false);
 	const [expenseForm, setExpenseForm] = useState<ExpenseForm>({title:'', recipient:'', allowance:0, description:''})
 	const [itemsForm, setItemsForm] = useState<ItemsForm>({name:'', price:0, quantity:0})
+	// const [currentExpenseId, setCurrentExpenseId] = useState(0);
+	const [currentItemId, setcurrentItemId] = useState(0);
 
 
 	useEffect(() =>{
@@ -78,6 +87,18 @@ export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) =
 			setShowItemForm(prevForm => {return !prevForm})
 		}
 
+	}
+
+	const openEditForm = (event:React.MouseEvent<HTMLButtonElement | HTMLDivElement>, expenseId:number, id:number) => {
+		event.stopPropagation();
+		// setCurrentExpenseId(expenseId)
+		setcurrentItemId(id);
+		setShowEditItemForm(true);
+		loadOneItem(id);
+	}
+
+	const closeEditForm = (event:React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+		setShowEditItemForm(false);
 	}
 
 	const handleFormInputs = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -105,6 +126,12 @@ export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) =
 		}else{
 			setExpenses(result.data);
 		}
+	}
+
+	
+	const loadOneExpense = async (id:number) => {
+		const result = await axios.get(`http://localhost:8080/api/expenses/${id}`)
+		setExpense(result.data);
 	}
 
 	const addExpense = async () => {
@@ -144,8 +171,47 @@ export const ExpenseContextProvider = ({children}:ExpenseContextProviderProps) =
 		loadItemsByExpense(expenseId)
 	}
 
+	const loadOneItem = async (id:number) => {
+		const result = await axios.get(`http://localhost:8080/api/items/${id}`)
+		let test = result.data;
+		setItemsForm({name:test.name, price:test.price, quantity:test.quantity})
+	}
+
+	const updateItem = async(event:React.MouseEvent<HTMLButtonElement>, id:number) => {
+		await axios.put(`http://localhost:8080/api/items/${id}`, itemsForm)
+		setItemsForm({name:'', price:0, quantity:0})
+		setShowEditItemForm(false);
+	}
+
+
 	return(
-		<ExpenseContext.Provider value={{expenses, expenseForm,showForm, toggleShowForm, handleFormInputs,addExpense, deleteExpense, items, loadItemsByExpense, showItemForm, itemsForm,handleItemFormInputs,addItem,deleteItem}} >
+		<ExpenseContext.Provider 
+			value={
+				{
+					expenses, 
+					expenseForm,
+					showForm, 
+					showEditItemForm, 
+					toggleShowForm, 
+					openEditForm, 
+					handleFormInputs,
+					addExpense, 
+					deleteExpense, 
+					expense, 
+					loadOneExpense, 
+					items, 
+					loadItemsByExpense, 
+					showItemForm, 
+					itemsForm,
+					handleItemFormInputs,
+					addItem,
+					deleteItem,
+					loadOneItem,
+					closeEditForm,
+					updateItem,
+					currentItemId
+				}
+			} >
 			{children}
 		</ExpenseContext.Provider>
 	)
