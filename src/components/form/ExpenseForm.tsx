@@ -2,7 +2,7 @@ import "./Form.css";
 import {useContext} from 'react'
 import { ExpenseContext } from "../../contexts/ExpenseContext";
 
-const Form = () => {
+const ExpenseForm = () => {
 	const {expenseForm, toggleShowForm, handleFormInputs, addExpense} = useContext(ExpenseContext);
 	console.log(expenseForm);
 	return (
@@ -52,4 +52,4 @@ const Form = () => {
 	)
 }
 
-export default Form
+export default ExpenseForm
