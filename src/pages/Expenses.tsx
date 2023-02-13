@@ -5,11 +5,12 @@ import { ExpenseObject } from '../contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '../assets/delete.svg';
 import EditIcon from '../assets/edit.svg';
-import Form from '../components/form/Form';
+import ExpenseForm from '../components/form/ExpenseForm';
+import EditExpenseForm from '../components/form/EditExpenseForm';
 
 
 const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObject) => {
-	const {deleteExpense} = useContext(ExpenseContext);
+	const {deleteExpense, openEditForm, currentExpenseId} = useContext(ExpenseContext);
 
 	const [isHover, setIsHover] = useState(null);
 	const handleMouseEnter = (id:any) => {
@@ -49,7 +50,7 @@ const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObje
 			<div className="expense-right-section">
 				<p>&#8369;{allowance}</p>
 				<div className="icons">
-					<img src={EditIcon} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
+					<img src={EditIcon} id="edit-expense-form" style={isHover === id ? IconHoverStyle : {opacity:0}} onClick={(e) => openEditForm(e, Number(id), 0)}/>
 					<img src={DeleteIcon} alt="" onClick={(e) => deleteExpense(e, id)} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
 				</div>
 			</div>
@@ -58,7 +59,7 @@ const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObje
 }
 
 const Expenses = () => {
-	const {expenses, showForm, toggleShowForm} = useContext(ExpenseContext);
+	const {expenses, showForm, toggleShowForm, showEditExpenseForm} = useContext(ExpenseContext);
 
 
 	const expenseItems = expenses.map((expense) => {
@@ -77,7 +78,8 @@ const Expenses = () => {
 	return (
 		<div className="expense-container">
 			<button className="button" id="toggle-expense-form" onClick={(e) => toggleShowForm(e)}>Add Expense</button>
-			{showForm && <Form/>}
+			{showForm && <ExpenseForm/>}
+			{showEditExpenseForm && <EditExpenseForm/>}
 			<div className="expenses">
 				{expenseItems}
 			</div>

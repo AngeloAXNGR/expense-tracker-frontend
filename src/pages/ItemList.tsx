@@ -43,7 +43,7 @@ const ItemData = ({id, name, price, quantity}:ItemsObject) => {
 				<h3>Price: &#8369;{price}</h3>
 				<h3>Qty: {quantity}</h3>
 				<div className="icons">
-					<img src={EditIcon} style={isHover === id ? IconHoverStyle : {opacity:0}} onClick={(e) => openEditForm(e, Number(expenseId), id)}/>
+					<img src={EditIcon} id="edit-items-form" style={isHover === id ? IconHoverStyle : {opacity:0}} onClick={(e) => openEditForm(e, Number(expenseId), id)}/>
 					<img src={DeleteIcon} alt="" onClick={(e) => {deleteItem(e, id, Number(expenseId))}} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
 				</div>
 			</div>
