@@ -8,7 +8,7 @@ const EditItemForm = () => {
 	const {currentItemId, itemsForm, closeEditForm, handleItemFormInputs, loadOneItem, updateItem} = useContext(ExpenseContext)
 	return (
 		<div className="form">
-			<div className="filler" id="toggle-items-form" 	onClick={(e) => closeEditForm(e)}></div>
+			<div className="filler" id="edit-items-form" 	onClick={(e) => closeEditForm(e)}></div>
 			<div className="modal">
 				<div className="form-inputs">
 					<input 
@@ -35,7 +35,7 @@ const EditItemForm = () => {
 				</div>
 				<div className="form-buttons">
 					<button onClick={(e) => updateItem(e,currentItemId)}>Update</button>
-					<button id="toggle-items-form" onClick={(e) => closeEditForm(e)}>Cancel</button>
+					<button id="edit-items-form" onClick={(e) => closeEditForm(e)}>Cancel</button>
 				</div>
 			</div>
 		</div>
