@@ -4,6 +4,7 @@ import { ExpenseContext } from '../contexts/ExpenseContext'
 import { ExpenseObject } from '../contexts/ExpenseContext'
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '../assets/delete.svg';
+import EditIcon from '../assets/edit.svg';
 import Form from '../components/form/Form';
 
 
@@ -46,8 +47,11 @@ const ExpenseData = ({id, title, recipient, allowance, description}: ExpenseObje
 				<h3 id="recipient-name">From: {recipient}</h3>
 			</div>
 			<div className="expense-right-section">
-				<h1>{allowance}</h1>
-				<img src={DeleteIcon} alt="" onClick={(e) => deleteExpense(e, id)} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
+				<p>&#8369;{allowance}</p>
+				<div className="icons">
+					<img src={EditIcon} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
+					<img src={DeleteIcon} alt="" onClick={(e) => deleteExpense(e, id)} style={isHover === id ? IconHoverStyle : {opacity:0}}/>
+				</div>
 			</div>
 		</div>
 	)
@@ -76,7 +80,6 @@ const Expenses = () => {
 			{showForm && <Form/>}
 			<div className="expenses">
 				{expenseItems}
-
 			</div>
 		</div>
 	)
